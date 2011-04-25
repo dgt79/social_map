@@ -4,5 +4,6 @@ require 'bundler/setup'
 
 
 get '/' do
-  'las-o-ncolo de treaba'
+  req = Rack::Request.new(env)
+  req.inspect
 end	
