@@ -1,3 +1,3 @@
-require 'ola_mundo'
+require './ola_mundo'
 
 run Sinatra::Application
