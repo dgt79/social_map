@@ -53,6 +53,8 @@
                       animation: google.maps.Animation.DROP,
                       position: initialLocation
                   });
+
+                  social_map();
                   google.maps.event.addListener(marker, 'click', toggleBounce);
               }, function() {
                   handleNoGeolocation(browserSupportFlag);
@@ -170,7 +172,6 @@
         FB.api('/me', function(response) {
 //            document.getElementById('login').style.display = "block";
             document.getElementById('login').innerHTML = response.name + " succsessfully logged in!";
-            social_map();
         });
     }
     function logout() {
