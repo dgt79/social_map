@@ -99,8 +99,6 @@
                   marker.setAnimation(google.maps.Animation.BOUNCE);
               }
           }
-
-          social_map();
       }
 
       function placeMarker(address) {
@@ -172,6 +170,7 @@
         FB.api('/me', function(response) {
 //            document.getElementById('login').style.display = "block";
             document.getElementById('login').innerHTML = response.name + " succsessfully logged in!";
+            social_map();
         });
     }
     function logout() {
