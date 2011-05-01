@@ -7,7 +7,6 @@ require 'json'
 require 'erb'
 
 APP_ID = "142633465810557"
-APP_SECRET = "b4543642cf352ec705b4e980a663a576"
 
 get '/' do
 #  ip = request.ip == '127.0.0.1' ? '' : request.ip
