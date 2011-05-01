@@ -17,10 +17,6 @@ get '/' do
 	erb :index
 end
 
-get '/friends' do
-	erb :friends
-end
-
 get '/social_map' do
 	erb :social_map
 end
