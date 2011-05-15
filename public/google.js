@@ -26,7 +26,7 @@ function initialize() {
 				position: initialLocation
 			});
 
-			social_map();
+			friends_location();
 			google.maps.event.addListener(marker, 'click', toggleBounce);
 		}, function() {
 			handleNoGeolocation(browserSupportFlag);
@@ -55,7 +55,7 @@ function initialize() {
 	}
 
 	function handleNoGeolocation(errorFlag) {
-		if (errorFlag == true) {
+		if (errorFlag) {
 			alert("Geolocation service failed.");
 			initialLocation = newyork;
 		} else {
@@ -73,6 +73,16 @@ function initialize() {
 			marker.setAnimation(google.maps.Animation.BOUNCE);
 		}
 	}
+}
+
+function placeMarker2(coordinate) {
+	var marker = new google.maps.Marker({
+			map: map,
+			draggable:false,
+			animation: google.maps.Animation.DROP,
+			position: coordinate
+		});
+		drawPolyline(initialLocation, coordinate);
 }
 
 function placeMarker(address) {
