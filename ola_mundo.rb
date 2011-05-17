@@ -27,10 +27,15 @@ get '/geolocations.json' do
 	coordinates = []
 
 	params[:locations].split('#').each { |location|
-		escaped_location = URI.escape location
+		id_location_pattern = /(.*):\s*(.*)$/
+		matches = id_location_pattern.match	location
+		location_id = matches[1]
+		location_name = matches[2]
 
-		if (@@cache.has_key? location)
-			coordinates.push @@cache[location]
+		escaped_location = URI.escape location_name
+
+		if (@@cache.has_key? location_id)
+			coordinates.push @@cache[location_id]
 		else
 			uri = URI.parse("http://maps.googleapis.com/maps/api/geocode/json?address=#{escaped_location}&sensor=false")
 			response = Net::HTTP.get_response uri
@@ -40,8 +45,9 @@ get '/geolocations.json' do
 				latitude = result['results'][0]['geometry']['location']['lat']
 				longitude = result['results'][0]['geometry']['location']['lng']
 
-				coordinates.push({"lat" => latitude, "lng" => longitude})
-				@@cache[location] = {"lat" => latitude, "lng" => longitude}
+				coordinate = {"id" => location_id, "lat" => latitude, "lng" => longitude}
+				coordinates.push(coordinate)
+				@@cache[location_id] = coordinate
 			else
 				puts "Geocode for #{location} was not successful for the following reason: #{result['status']}"
 			end
