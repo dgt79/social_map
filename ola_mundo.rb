@@ -11,12 +11,7 @@ APP_ID = "142633465810557"
 @@cache = Hash.new
 
 get '/' do
-#  ip = request.ip == '127.0.0.1' ? '' : request.ip
-#  response = Net::HTTP.get_response URI.parse("http://freegeoip.net/json/#{ip}")
-#  result = JSON.parse response.body
-#  @latitude = result['latitude']
-#  @longitude = result['longitude']
-	erb :index
+	erb :social_map
 end
 
 get '/social_map' do
