@@ -36,9 +36,6 @@ function logout() {
 }
 
 function display_my_social_graph() {
-	var locations = new Array();
-	var friends_per_location = new Array();
-
 	FB.getLoginStatus(function(rsp) {
 //		FB.api('/me', ...); gives an "An active access token must be used to query information about the current user."
 //		the work around is to call getLoginStatus and get the user id from the response, then use it instead of '/me'
@@ -48,34 +45,24 @@ function display_my_social_graph() {
 			FB.Data.waitOn([query], function() {
 				FB.Array.forEach(query.value, function(row) {
 					if (row.current_location != null) {
-						var location_id = '';
-						if (row.current_location['id'] != undefined) {
-                            location_id = row.current_location['id'];
-						} else {
-							location_id = $.base64.encode(row.name);
-						}
+						var current_location = row.current_location['city'] + ', ' + row.current_location['country'];
+						$.getJSON("geolocation.json", {location: current_location}, function(data) {
+//							randomize the location a bit, as some friends might live in same place
+							var latitude_offset = Math.floor(Math.random()*101);
+							if (latitude_offset < 10) latitude_offset = 99 - latitude_offset;
 
-						if (friends_per_location[location_id] == undefined) friends_per_location[location_id] = '';
-						friends_per_location[location_id] += row.name + '/';
+							var longitute_offset = Math.floor(Math.random()*101);
+							if (longitute_offset < 10) longitute_offset = 99 - longitute_offset;
 
-						var location = location_id + ': ' +
-								row.current_location['city'] + ', ' +
-								row.current_location['country'];
-						locations.push(location);
+							linkLocation(row.name, data.lat + latitude_offset / 10000, data.lng + longitute_offset / 10000);
+
+//							console.log(row.name + " - " + data.lat + latitude_offset / 10000 + ", " + data.lng + longitute_offset / 10000);
+						});
+
 					} else {
 //					location is not shared
 //					TODO
 					}
-				});
-				//	go to the server to get the coordinates. It can be done on the client as well, but making lots of
-				//	requests to google geocoder results in QUERY_OVER_LIMIT error responses (too many requests in a very short time).
-				//	A solution could be the use of a timeout, but javascript doesn't have a real timeout; google docs recommends
-				//	getting the coordinates on the server.
-				//	TODO validate length locations.join - query string limit
-				$.getJSON("geolocations.json", {locations: locations.unique().join('#')}, function(data) {
-					data.forEach(function(item) {
-						linkLocation(friends_per_location[item.id], item.lat, item.lng);
-					});
 				});
 			});
 		});

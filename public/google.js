@@ -22,7 +22,8 @@ function initialize() {
 				map:map,
 				draggable:false,
 				animation: google.maps.Animation.DROP,
-				position: initialLocation
+				position: initialLocation,
+				title: "me"
 			});
 
 			display_my_social_graph();
